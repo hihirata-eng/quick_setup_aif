@@ -1,4 +1,7 @@
 @description('Azure region for all resources')
+@metadata({
+  strongType: 'location'
+})
 param location string = resourceGroup().location
 
 @description('Prefix for all resource names (3-8 lowercase alphanumeric characters)')
@@ -28,7 +31,7 @@ param prefix string = 'aif'
   'gpt-4o'
   'gpt-4o-mini'
 ])
-param gptModelName string = 'gpt-5.5'
+param gptModelName string = 'gpt-5.4'
 
 @description('Tokens per minute capacity (in thousands)')
 @minValue(1)

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.43.8.12551",
-      "templateHash": "8640874428580807914"
+      "templateHash": "14051216060785669671"
     }
   },
   "parameters": {
@@ -13,6 +13,7 @@
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
+        "strongType": "location",
         "description": "Azure region for all resources"
       }
     },
@@ -27,7 +28,7 @@
     },
     "gptModelName": {
       "type": "string",
-      "defaultValue": "gpt-5.5",
+      "defaultValue": "gpt-5.4",
       "allowedValues": [
         "gpt-5.5",
         "gpt-5.4",
