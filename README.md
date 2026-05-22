@@ -10,7 +10,7 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 
 | リソース | 説明 |
 |---|---|
-| Azure OpenAI Service | GPT-4o（最新）モデルをデプロイ |
+| Azure OpenAI Service | GPT-5.2以上のモデルをチェックボックスで選択してデプロイ（デフォルト: gpt-5.4）|
 | Azure AI Hub | AI Foundry のハブリソース |
 | Azure AI Project | AI Foundry のプロジェクト |
 | Storage Account | AI Hub の依存リソース |
@@ -73,9 +73,9 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 
 - Azure サブスクリプション
 - デプロイ先リージョンで Azure OpenAI Service の利用が承認済みであること
-- 十分な GPT-4o クォータ（デフォルト: 10K TPM）
+- 選択したモデルに対する十分なクォータ（デフォルト: 10K TPM）
 
 ## 注意事項
 
-- GPT-4o モデルのクォータはリージョンによって制限があります。`gptDeploymentCapacity` パラメータで調整してください。
+- GPT-5系モデルのクォータはリージョンやサブスクリプションのティアによって制限があります。`gptDeploymentCapacity` パラメータで調整してください。
 - AI Foundry (Hub/Project) は East US、West Europe など[対応リージョン](https://learn.microsoft.com/azure/ai-studio/reference/region-support)でのみ利用可能です。
