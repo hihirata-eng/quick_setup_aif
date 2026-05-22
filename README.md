@@ -22,8 +22,9 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 
 | パラメータ | デフォルト値 | 説明 |
 |---|---|---|
-| `prefix` | `aif` | リソース名のプレフィックス（3〜8文字） |
 | `gptDeploymentCapacity` | `10` | TPM キャパシティ（千単位、モデルごと共通） |
+
+> リソース名は [Microsoft 推奨の省略形](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations) + ユニークサフィックスで自動生成されます（例: `oai-xxxxxx`, `kv-xxxxxx`）。
 
 > **Location** はリソースグループのリージョンを自動使用します。選択不要です。
 

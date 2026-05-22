@@ -1,9 +1,10 @@
 param location string
 param name string
+param logAnalyticsName string
 param tags object = {}
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
-  name: '${name}-law'
+  name: logAnalyticsName
   location: location
   tags: tags
   properties: {

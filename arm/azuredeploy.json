@@ -5,19 +5,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.43.8.12551",
-      "templateHash": "6283400848230494882"
+      "templateHash": "17788471622096715095"
     }
   },
   "parameters": {
-    "prefix": {
-      "type": "string",
-      "defaultValue": "aif",
-      "minLength": 3,
-      "maxLength": 8,
-      "metadata": {
-        "description": "Prefix for all resource names (3-8 lowercase alphanumeric characters)"
-      }
-    },
     "deployGpt55": {
       "type": "bool",
       "defaultValue": false,
@@ -92,13 +83,14 @@
       "createdBy": "bicep"
     },
     "names": {
-      "openai": "[format('{0}-aoai-{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "storage": "[format('{0}st{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "keyVault": "[format('{0}-kv-{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "containerRegistry": "[format('{0}acr{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "appInsights": "[format('{0}-appi-{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "aiHub": "[format('{0}-hub-{1}', parameters('prefix'), variables('uniqueSuffix'))]",
-      "aiProject": "[format('{0}-proj-{1}', parameters('prefix'), variables('uniqueSuffix'))]"
+      "openai": "[format('oai-{0}', variables('uniqueSuffix'))]",
+      "storage": "[format('st{0}', variables('uniqueSuffix'))]",
+      "keyVault": "[format('kv-{0}', variables('uniqueSuffix'))]",
+      "containerRegistry": "[format('cr{0}', variables('uniqueSuffix'))]",
+      "appInsights": "[format('appi-{0}', variables('uniqueSuffix'))]",
+      "logAnalytics": "[format('log-{0}', variables('uniqueSuffix'))]",
+      "aiHub": "[format('aih-{0}', variables('uniqueSuffix'))]",
+      "aiProject": "[format('aip-{0}', variables('uniqueSuffix'))]"
     }
   },
   "resources": [
@@ -325,6 +317,9 @@
           "name": {
             "value": "[variables('names').appInsights]"
           },
+          "logAnalyticsName": {
+            "value": "[variables('names').logAnalytics]"
+          },
           "tags": {
             "value": "[variables('tags')]"
           }
@@ -336,7 +331,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.43.8.12551",
-              "templateHash": "13053159529480310516"
+              "templateHash": "1313818725466921026"
             }
           },
           "parameters": {
@@ -344,6 +339,9 @@
               "type": "string"
             },
             "name": {
+              "type": "string"
+            },
+            "logAnalyticsName": {
               "type": "string"
             },
             "tags": {
@@ -355,7 +353,7 @@
             {
               "type": "Microsoft.OperationalInsights/workspaces",
               "apiVersion": "2022-10-01",
-              "name": "[format('{0}-law', parameters('name'))]",
+              "name": "[parameters('logAnalyticsName')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
               "properties": {
@@ -374,10 +372,10 @@
               "kind": "web",
               "properties": {
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}-law', parameters('name')))]"
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName'))]"
               },
               "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', format('{0}-law', parameters('name')))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName'))]"
               ]
             }
           ],

@@ -1,10 +1,5 @@
 var location = resourceGroup().location
 
-@description('Prefix for all resource names (3-8 lowercase alphanumeric characters)')
-@minLength(3)
-@maxLength(8)
-param prefix string = 'aif'
-
 @description('gpt-5.5 をデプロイする (2026-04-24) - 最新・最高性能')
 param deployGpt55 bool = false
 
@@ -40,14 +35,17 @@ var tags = {
   createdBy: 'bicep'
 }
 
+// Microsoft推奨の省略形を使用したリソース名
+// https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 var names = {
-  openai: '${prefix}-aoai-${uniqueSuffix}'
-  storage: '${prefix}st${uniqueSuffix}'
-  keyVault: '${prefix}-kv-${uniqueSuffix}'
-  containerRegistry: '${prefix}acr${uniqueSuffix}'
-  appInsights: '${prefix}-appi-${uniqueSuffix}'
-  aiHub: '${prefix}-hub-${uniqueSuffix}'
-  aiProject: '${prefix}-proj-${uniqueSuffix}'
+  openai: 'oai-${uniqueSuffix}'
+  storage: 'st${uniqueSuffix}'
+  keyVault: 'kv-${uniqueSuffix}'
+  containerRegistry: 'cr${uniqueSuffix}'
+  appInsights: 'appi-${uniqueSuffix}'
+  logAnalytics: 'log-${uniqueSuffix}'
+  aiHub: 'aih-${uniqueSuffix}'
+  aiProject: 'aip-${uniqueSuffix}'
 }
 
 module storage 'modules/storage.bicep' = {
@@ -82,6 +80,7 @@ module appInsights 'modules/app-insights.bicep' = {
   params: {
     location: location
     name: names.appInsights
+    logAnalyticsName: names.logAnalytics
     tags: tags
   }
 }
