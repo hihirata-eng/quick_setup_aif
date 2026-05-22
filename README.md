@@ -49,34 +49,113 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 .
 ├── .github/
 │   └── workflows/
-│       └── bicep-to-arm.yml   # Bicep → ARM 変換 CI/CD
+│       └── bicep-to-arm.yml      # Bicep → ARM 変換 CI/CD
 ├── bicep/
-│   ├── main.bicep             # メインテンプレート
+│   ├── main.bicep                # メインテンプレート（パラメータ定義・モジュール呼び出し）
 │   └── modules/
-│       ├── openai.bicep       # Azure OpenAI + GPT デプロイ
-│       ├── ai-hub.bicep       # Azure AI Hub
-│       ├── ai-project.bicep   # Azure AI Project
-│       ├── storage.bicep      # ストレージアカウント
-│       ├── keyvault.bicep     # Key Vault
+│       ├── ai-services.bicep     # Azure AI Services (kind: AIServices) + GPT デプロイ
+│       ├── ai-hub.bicep          # Azure AI Hub
+│       ├── ai-project.bicep      # Azure AI Project
+│       ├── storage.bicep         # ストレージアカウント
+│       ├── keyvault.bicep        # Key Vault
 │       ├── container-registry.bicep
-│       └── app-insights.bicep
-└── arm/
-    └── azuredeploy.json       # 自動生成 ARM テンプレート
+│       └── app-insights.bicep    # Application Insights + Log Analytics
+├── arm/
+│   └── azuredeploy.json          # 自動生成 ARM テンプレート（直接編集禁止）
+├── AGENTS.md                     # AIエージェント向けプロジェクト規則
+└── .gitignore
 ```
-
-## 開発フロー
-
-1. `bicep/` 配下の Bicep ファイルを編集
-2. `main` ブランチへ push
-3. GitHub Actions が自動的に `arm/azuredeploy.json` を生成・コミット
 
 ## 前提条件
 
 - Azure サブスクリプション
-- デプロイ先リージョンで Azure OpenAI Service の利用が承認済みであること
+- デプロイ先リージョンで Azure AI Services の利用が承認済みであること
 - 選択したモデルに対する十分なクォータ（デフォルト: 10K TPM）
 
 ## 注意事項
 
 - GPT-5系モデルのクォータはリージョンやサブスクリプションのティアによって制限があります。`gptDeploymentCapacity` パラメータで調整してください。
 - AI Foundry (Hub/Project) は East US、West Europe など[対応リージョン](https://learn.microsoft.com/azure/ai-studio/reference/region-support)でのみ利用可能です。
+
+---
+
+## メンテナ向け
+
+### 開発環境セットアップ
+
+```bash
+# Bicep CLI のインストール（az bicep install が SSL エラーになる場合）
+curl -k -Lo /tmp/bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+chmod +x /tmp/bicep
+
+# ビルド確認
+/tmp/bicep build bicep/main.bicep --outfile arm/azuredeploy.json
+```
+
+### 開発フロー
+
+```
+[Bicep 編集] → [ローカルビルド確認] → [commit & push to main]
+                                              ↓
+                                   GitHub Actions が自動実行
+                                   az bicep build → azuredeploy.json 更新
+                                   → 自動コミット（[ci skip] なし）
+```
+
+1. `bicep/` 配下を編集
+2. **必ず** `/tmp/bicep build bicep/main.bicep` でエラーなしを確認してからコミット
+3. `main` ブランチへ push → GitHub Actions が `arm/azuredeploy.json` を自動更新
+4. `arm/azuredeploy.json` は自動生成ファイルのため**直接編集しない**
+
+### コミット規則
+
+[Conventional Commits](https://www.conventionalcommits.org/) を使用する。詳細は [AGENTS.md](./AGENTS.md) を参照。
+
+```
+feat(bicep): add gpt-5.6 model deployment option
+fix(modules): correct dependsOn chain in ai-services
+refactor(bicep): rename openai module to ai-services
+docs: update README model table
+ci: bump bicep-to-arm workflow to bicep 0.44
+```
+
+### リソース命名規則
+
+[Microsoft CAF 推奨の省略形](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations)を使用する。
+
+| リソース | 略称 | 例 |
+|---|---|---|
+| Azure AI Services | `ais-` | `ais-abc123` |
+| Storage Account | `st` | `stabc123` |
+| Key Vault | `kv-` | `kv-abc123` |
+| Container Registry | `cr` | `crabc123` |
+| Application Insights | `appi-` | `appi-abc123` |
+| Log Analytics Workspace | `log-` | `log-abc123` |
+| AI Hub | `aih-` | `aih-abc123` |
+| AI Project | `aip-` | `aip-abc123` |
+
+### モデルを追加・更新する手順
+
+1. `bicep/modules/ai-services.bicep` に `bool` パラメータと `deployment` リソースを追加する
+   - `dependsOn` のチェーンに組み込むこと（並列デプロイ不可）
+2. `bicep/main.bicep` の `aiServices` モジュール呼び出しに新パラメータを追加する
+3. `README.md` のモデル選択表を更新する
+4. ビルド確認 → コミット → push
+
+> **方針**: 対象モデルは **GPT-5.2 以上** に限定する。gpt-4o 等の旧世代モデルは追加しない。
+
+### Azure AI Services について
+
+このテンプレートでは `kind: 'AIServices'`（AI Foundry ネイティブ）を使用している。
+
+- `kind: 'OpenAI'`（旧来の単独 Azure OpenAI Service）は**使用しない**
+- AI Hub との接続には `aiServicesId`（リソースID）と `aiServicesTarget`（エンドポイントURL）を使用する
+- 参考: [Azure Quickstart Templates - AI Foundry Basics](https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.machinelearningservices/aifoundry-basics)
+
+### GitHub Actions のスコープ
+
+ワークフローファイル（`.github/workflows/`）を push するには `workflow` スコープが必要。
+
+```bash
+gh auth refresh -h github.com -s workflow
+```
