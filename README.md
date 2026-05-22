@@ -10,7 +10,7 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 
 | リソース | 説明 |
 |---|---|
-| Azure OpenAI Service | GPT-5.2以上のモデルをチェックボックスで選択してデプロイ（デフォルト: gpt-5.4）|
+| Azure AI Services | AI Foundry ネイティブのマルチサービスアカウント（OpenAI + Speech + Content Safety 統合）。GPT-5.2以上のモデルをチェックボックスで選択してデプロイ（デフォルト: gpt-5.4）|
 | Azure AI Hub | AI Foundry のハブリソース |
 | Azure AI Project | AI Foundry のプロジェクト |
 | Storage Account | AI Hub の依存リソース |

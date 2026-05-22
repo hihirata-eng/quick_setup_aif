@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.43.8.12551",
-      "templateHash": "17788471622096715095"
+      "templateHash": "4965776409236421837"
     }
   },
   "parameters": {
@@ -83,7 +83,7 @@
       "createdBy": "bicep"
     },
     "names": {
-      "openai": "[format('oai-{0}', variables('uniqueSuffix'))]",
+      "aiServices": "[format('ais-{0}', variables('uniqueSuffix'))]",
       "storage": "[format('st{0}', variables('uniqueSuffix'))]",
       "keyVault": "[format('kv-{0}', variables('uniqueSuffix'))]",
       "containerRegistry": "[format('cr{0}', variables('uniqueSuffix'))]",
@@ -391,7 +391,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2025-04-01",
-      "name": "openAI",
+      "name": "aiServices",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -402,7 +402,7 @@
             "value": "[variables('location')]"
           },
           "name": {
-            "value": "[variables('names').openai]"
+            "value": "[variables('names').aiServices]"
           },
           "tags": {
             "value": "[variables('tags')]"
@@ -442,7 +442,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.43.8.12551",
-              "templateHash": "7066662111386185318"
+              "templateHash": "15916169625989980772"
             }
           },
           "parameters": {
@@ -502,7 +502,7 @@
               "name": "[parameters('name')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
-              "kind": "OpenAI",
+              "kind": "AIServices",
               "sku": {
                 "name": "S0"
               },
@@ -548,8 +548,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.5')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.5')]"
               ]
             },
             {
@@ -569,8 +569,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4')]"
               ]
             },
             {
@@ -590,8 +590,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-pro')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-pro')]"
               ]
             },
             {
@@ -611,8 +611,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-mini')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-mini')]"
               ]
             },
             {
@@ -632,8 +632,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-nano')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-nano')]"
               ]
             },
             {
@@ -653,8 +653,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.3-codex')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.3-codex')]"
               ]
             },
             {
@@ -674,8 +674,8 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.2')]",
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.2')]"
               ]
             }
           ],
@@ -723,8 +723,11 @@
           "applicationInsightsId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.id.value]"
           },
-          "openAIId": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'openAI'), '2025-04-01').outputs.id.value]"
+          "aiServicesId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aiServices'), '2025-04-01').outputs.id.value]"
+          },
+          "aiServicesTarget": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aiServices'), '2025-04-01').outputs.endpoint.value]"
           }
         },
         "template": {
@@ -734,7 +737,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.43.8.12551",
-              "templateHash": "13749155115991394719"
+              "templateHash": "13168869278016166413"
             }
           },
           "parameters": {
@@ -760,7 +763,10 @@
             "applicationInsightsId": {
               "type": "string"
             },
-            "openAIId": {
+            "aiServicesId": {
+              "type": "string"
+            },
+            "aiServicesTarget": {
               "type": "string"
             }
           },
@@ -786,16 +792,16 @@
             {
               "type": "Microsoft.MachineLearningServices/workspaces/connections",
               "apiVersion": "2024-04-01",
-              "name": "[format('{0}/{1}', parameters('name'), 'aoai-connection')]",
+              "name": "[format('{0}/{1}', parameters('name'), format('{0}-connection-AIServices', parameters('name')))]",
               "properties": {
                 "category": "AzureOpenAI",
-                "target": "https://cognitiveservices.azure.com/",
+                "target": "[parameters('aiServicesTarget')]",
                 "authType": "AAD",
                 "isSharedToAll": true,
                 "metadata": {
                   "ApiVersion": "2024-02-01",
                   "ApiType": "azure",
-                  "ResourceId": "[parameters('openAIId')]"
+                  "ResourceId": "[parameters('aiServicesId')]"
                 }
               },
               "dependsOn": [
@@ -816,10 +822,10 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'aiServices')]",
         "[resourceId('Microsoft.Resources/deployments', 'appInsights')]",
         "[resourceId('Microsoft.Resources/deployments', 'containerRegistry')]",
         "[resourceId('Microsoft.Resources/deployments', 'keyVault')]",
-        "[resourceId('Microsoft.Resources/deployments', 'openAI')]",
         "[resourceId('Microsoft.Resources/deployments', 'storage')]"
       ]
     },
@@ -914,9 +920,9 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aiHub'), '2025-04-01').outputs.name.value]"
     },
-    "openAIEndpoint": {
+    "aiServicesEndpoint": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'openAI'), '2025-04-01').outputs.endpoint.value]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aiServices'), '2025-04-01').outputs.endpoint.value]"
     }
   }
 }

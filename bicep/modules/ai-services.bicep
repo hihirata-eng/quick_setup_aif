@@ -15,11 +15,13 @@ param deployGpt52codex bool = false
 @maxValue(100)
 param capacity int = 10
 
-resource openAI 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
+// AIServices (kind: 'AIServices') は Azure AI Foundry ネイティブのマルチサービスアカウント。
+// kind: 'OpenAI' の単独リソースではなく、AI Hub と統合して使用する推奨方式。
+resource aiServices 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
   name: name
   location: location
   tags: tags
-  kind: 'OpenAI'
+  kind: 'AIServices'
   sku: {
     name: 'S0'
   }
@@ -30,7 +32,7 @@ resource openAI 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
 }
 
 resource dep55 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt55) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.5'
   sku: { name: 'GlobalStandard', capacity: capacity }
   properties: {
@@ -39,7 +41,7 @@ resource dep55 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-prev
 }
 
 resource dep54 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt54) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.4'
   dependsOn: [dep55]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -49,7 +51,7 @@ resource dep54 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-prev
 }
 
 resource dep54pro 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt54pro) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.4-pro'
   dependsOn: [dep54]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -59,7 +61,7 @@ resource dep54pro 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-p
 }
 
 resource dep54mini 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt54mini) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.4-mini'
   dependsOn: [dep54pro]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -69,7 +71,7 @@ resource dep54mini 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-
 }
 
 resource dep54nano 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt54nano) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.4-nano'
   dependsOn: [dep54mini]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -79,7 +81,7 @@ resource dep54nano 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-
 }
 
 resource dep53codex 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt53codex) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.3-codex'
   dependsOn: [dep54nano]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -89,7 +91,7 @@ resource dep53codex 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01
 }
 
 resource dep52 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt52) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.2'
   dependsOn: [dep53codex]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -99,7 +101,7 @@ resource dep52 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-prev
 }
 
 resource dep52codex 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01-preview' = if (deployGpt52codex) {
-  parent: openAI
+  parent: aiServices
   name: 'gpt-5.2-codex'
   dependsOn: [dep52]
   sku: { name: 'GlobalStandard', capacity: capacity }
@@ -108,6 +110,5 @@ resource dep52codex 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01
   }
 }
 
-output id string = openAI.id
-output endpoint string = openAI.properties.endpoint
-
+output id string = aiServices.id
+output endpoint string = aiServices.properties.endpoint

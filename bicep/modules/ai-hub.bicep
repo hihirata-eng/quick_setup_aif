@@ -5,7 +5,8 @@ param storageAccountId string
 param keyVaultId string
 param containerRegistryId string
 param applicationInsightsId string
-param openAIId string
+param aiServicesId string
+param aiServicesTarget string
 
 resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01' = {
   name: name
@@ -24,18 +25,18 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-04-01' = {
   }
 }
 
-resource openAIConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-04-01' = {
+resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/connections@2024-04-01' = {
   parent: aiHub
-  name: 'aoai-connection'
+  name: '${name}-connection-AIServices'
   properties: {
     category: 'AzureOpenAI'
-    target: 'https://cognitiveservices.azure.com/'
+    target: aiServicesTarget
     authType: 'AAD'
     isSharedToAll: true
     metadata: {
       ApiVersion: '2024-02-01'
       ApiType: 'azure'
-      ResourceId: openAIId
+      ResourceId: aiServicesId
     }
   }
 }

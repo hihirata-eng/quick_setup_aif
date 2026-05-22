@@ -38,7 +38,7 @@ var tags = {
 // Microsoft推奨の省略形を使用したリソース名
 // https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 var names = {
-  openai: 'oai-${uniqueSuffix}'
+  aiServices: 'ais-${uniqueSuffix}'
   storage: 'st${uniqueSuffix}'
   keyVault: 'kv-${uniqueSuffix}'
   containerRegistry: 'cr${uniqueSuffix}'
@@ -85,11 +85,11 @@ module appInsights 'modules/app-insights.bicep' = {
   }
 }
 
-module openAI 'modules/openai.bicep' = {
-  name: 'openAI'
+module aiServices 'modules/ai-services.bicep' = {
+  name: 'aiServices'
   params: {
     location: location
-    name: names.openai
+    name: names.aiServices
     tags: tags
     deployGpt55: deployGpt55
     deployGpt54: deployGpt54
@@ -113,7 +113,8 @@ module aiHub 'modules/ai-hub.bicep' = {
     keyVaultId: keyVault.outputs.id
     containerRegistryId: containerRegistry.outputs.id
     applicationInsightsId: appInsights.outputs.id
-    openAIId: openAI.outputs.id
+    aiServicesId: aiServices.outputs.id
+    aiServicesTarget: aiServices.outputs.endpoint
   }
 }
 
@@ -129,4 +130,4 @@ module aiProject 'modules/ai-project.bicep' = {
 
 output aiProjectName string = aiProject.outputs.name
 output aiHubName string = aiHub.outputs.name
-output openAIEndpoint string = openAI.outputs.endpoint
+output aiServicesEndpoint string = aiServices.outputs.endpoint
