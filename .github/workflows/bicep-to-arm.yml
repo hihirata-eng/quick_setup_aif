@@ -1,0 +1,41 @@
+name: Convert Bicep to ARM Template
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bicep/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-arm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Bicep CLI
+        run: |
+          az bicep install
+          az bicep version
+
+      - name: Build ARM template from Bicep
+        run: |
+          az bicep build \
+            --file bicep/main.bicep \
+            --outfile arm/azuredeploy.json
+
+      - name: Commit ARM template
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add arm/azuredeploy.json
+          if git diff --staged --quiet; then
+            echo "No changes to ARM template"
+          else
+            git commit -m "chore: update ARM template from Bicep [skip ci]"
+            git push
+          fi
