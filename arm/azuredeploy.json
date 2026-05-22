@@ -5,18 +5,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.43.8.12551",
-      "templateHash": "14051216060785669671"
+      "templateHash": "6283400848230494882"
     }
   },
   "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "strongType": "location",
-        "description": "Azure region for all resources"
-      }
-    },
     "prefix": {
       "type": "string",
       "defaultValue": "aif",
@@ -26,32 +18,60 @@
         "description": "Prefix for all resource names (3-8 lowercase alphanumeric characters)"
       }
     },
-    "gptModelName": {
-      "type": "string",
-      "defaultValue": "gpt-5.4",
-      "allowedValues": [
-        "gpt-5.5",
-        "gpt-5.4",
-        "gpt-5.4-pro",
-        "gpt-5.4-mini",
-        "gpt-5.4-nano",
-        "gpt-5.3-codex",
-        "gpt-5.2",
-        "gpt-5.2-codex",
-        "gpt-5.1",
-        "gpt-5",
-        "gpt-5-mini",
-        "gpt-5-nano",
-        "gpt-4.1",
-        "gpt-4.1-mini",
-        "gpt-4.1-nano",
-        "o4-mini",
-        "o3",
-        "gpt-4o",
-        "gpt-4o-mini"
-      ],
+    "deployGpt55": {
+      "type": "bool",
+      "defaultValue": false,
       "metadata": {
-        "description": "デプロイする GPT モデル名"
+        "description": "gpt-5.5 をデプロイする (2026-04-24) - 最新・最高性能"
+      }
+    },
+    "deployGpt54": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "gpt-5.4 をデプロイする (2026-03-05) - 高性能・推論対応 ★デフォルト"
+      }
+    },
+    "deployGpt54pro": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.4-pro をデプロイする (2026-03-05) - プロ版"
+      }
+    },
+    "deployGpt54mini": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.4-mini をデプロイする (2026-03-17) - 軽量版"
+      }
+    },
+    "deployGpt54nano": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.4-nano をデプロイする (2026-03-17) - 超軽量版"
+      }
+    },
+    "deployGpt53codex": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.3-codex をデプロイする (2026-02-24) - コーディング特化"
+      }
+    },
+    "deployGpt52": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.2 をデプロイする (2025-12-11)"
+      }
+    },
+    "deployGpt52codex": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "gpt-5.2-codex をデプロイする (2026-01-14) - コーディング特化"
       }
     },
     "gptDeploymentCapacity": {
@@ -60,53 +80,12 @@
       "minValue": 1,
       "maxValue": 100,
       "metadata": {
-        "description": "Tokens per minute capacity (in thousands)"
+        "description": "Tokens per minute capacity per model (in thousands)"
       }
     }
   },
   "variables": {
-    "modelVersionMap": {
-      "gpt-5.5": "2026-04-24",
-      "gpt-5.4": "2026-03-05",
-      "gpt-5.4-pro": "2026-03-05",
-      "gpt-5.4-mini": "2026-03-17",
-      "gpt-5.4-nano": "2026-03-17",
-      "gpt-5.3-codex": "2026-02-24",
-      "gpt-5.2": "2025-12-11",
-      "gpt-5.2-codex": "2026-01-14",
-      "gpt-5.1": "2025-11-13",
-      "gpt-5": "2025-08-07",
-      "gpt-5-mini": "2025-08-07",
-      "gpt-5-nano": "2025-08-07",
-      "gpt-4.1": "2025-04-14",
-      "gpt-4.1-mini": "2025-04-14",
-      "gpt-4.1-nano": "2025-04-14",
-      "o4-mini": "2025-04-16",
-      "o3": "2025-04-16",
-      "gpt-4o": "2024-11-20",
-      "gpt-4o-mini": "2024-07-18"
-    },
-    "modelSkuMap": {
-      "gpt-5.5": "GlobalStandard",
-      "gpt-5.4": "GlobalStandard",
-      "gpt-5.4-pro": "GlobalStandard",
-      "gpt-5.4-mini": "GlobalStandard",
-      "gpt-5.4-nano": "GlobalStandard",
-      "gpt-5.3-codex": "GlobalStandard",
-      "gpt-5.2": "GlobalStandard",
-      "gpt-5.2-codex": "GlobalStandard",
-      "gpt-5.1": "GlobalStandard",
-      "gpt-5": "GlobalStandard",
-      "gpt-5-mini": "GlobalStandard",
-      "gpt-5-nano": "GlobalStandard",
-      "gpt-4.1": "GlobalStandard",
-      "gpt-4.1-mini": "GlobalStandard",
-      "gpt-4.1-nano": "GlobalStandard",
-      "o4-mini": "GlobalStandard",
-      "o3": "GlobalStandard",
-      "gpt-4o": "GlobalStandard",
-      "gpt-4o-mini": "GlobalStandard"
-    },
+    "location": "[resourceGroup().location]",
     "uniqueSuffix": "[substring(uniqueString(resourceGroup().id), 0, 6)]",
     "tags": {
       "project": "quick-setup-aif",
@@ -134,7 +113,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').storage]"
@@ -204,7 +183,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').keyVault]"
@@ -275,7 +254,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').containerRegistry]"
@@ -341,7 +320,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').appInsights]"
@@ -422,7 +401,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').openai]"
@@ -430,16 +409,31 @@
           "tags": {
             "value": "[variables('tags')]"
           },
-          "gptModelName": {
-            "value": "[parameters('gptModelName')]"
+          "deployGpt55": {
+            "value": "[parameters('deployGpt55')]"
           },
-          "gptModelVersion": {
-            "value": "[variables('modelVersionMap')[parameters('gptModelName')]]"
+          "deployGpt54": {
+            "value": "[parameters('deployGpt54')]"
           },
-          "gptModelSku": {
-            "value": "[variables('modelSkuMap')[parameters('gptModelName')]]"
+          "deployGpt54pro": {
+            "value": "[parameters('deployGpt54pro')]"
           },
-          "gptDeploymentCapacity": {
+          "deployGpt54mini": {
+            "value": "[parameters('deployGpt54mini')]"
+          },
+          "deployGpt54nano": {
+            "value": "[parameters('deployGpt54nano')]"
+          },
+          "deployGpt53codex": {
+            "value": "[parameters('deployGpt53codex')]"
+          },
+          "deployGpt52": {
+            "value": "[parameters('deployGpt52')]"
+          },
+          "deployGpt52codex": {
+            "value": "[parameters('deployGpt52codex')]"
+          },
+          "capacity": {
             "value": "[parameters('gptDeploymentCapacity')]"
           }
         },
@@ -450,7 +444,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.43.8.12551",
-              "templateHash": "12696265244994596144"
+              "templateHash": "7066662111386185318"
             }
           },
           "parameters": {
@@ -464,30 +458,43 @@
               "type": "object",
               "defaultValue": {}
             },
-            "gptModelName": {
-              "type": "string",
-              "metadata": {
-                "description": "GPT model name to deploy"
-              }
+            "deployGpt55": {
+              "type": "bool",
+              "defaultValue": false
             },
-            "gptModelVersion": {
-              "type": "string",
-              "metadata": {
-                "description": "GPT model version (auto-resolved from main.bicep)"
-              }
+            "deployGpt54": {
+              "type": "bool",
+              "defaultValue": true
             },
-            "gptModelSku": {
-              "type": "string",
-              "defaultValue": "GlobalStandard",
-              "metadata": {
-                "description": "Deployment SKU name"
-              }
+            "deployGpt54pro": {
+              "type": "bool",
+              "defaultValue": false
             },
-            "gptDeploymentCapacity": {
+            "deployGpt54mini": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "deployGpt54nano": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "deployGpt53codex": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "deployGpt52": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "deployGpt52codex": {
+              "type": "bool",
+              "defaultValue": false
+            },
+            "capacity": {
               "type": "int",
-              "metadata": {
-                "description": "Tokens per minute capacity (in thousands)"
-              }
+              "defaultValue": 10,
+              "minValue": 1,
+              "maxValue": 100
             }
           },
           "resources": [
@@ -507,21 +514,169 @@
               }
             },
             {
+              "condition": "[parameters('deployGpt55')]",
               "type": "Microsoft.CognitiveServices/accounts/deployments",
               "apiVersion": "2024-04-01-preview",
-              "name": "[format('{0}/{1}', parameters('name'), parameters('gptModelName'))]",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.5')]",
               "sku": {
-                "name": "[parameters('gptModelSku')]",
-                "capacity": "[parameters('gptDeploymentCapacity')]"
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
               },
               "properties": {
                 "model": {
                   "format": "OpenAI",
-                  "name": "[parameters('gptModelName')]",
-                  "version": "[parameters('gptModelVersion')]"
+                  "name": "gpt-5.5",
+                  "version": "2026-04-24"
                 }
               },
               "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt54')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.4')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.4",
+                  "version": "2026-03-05"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.5')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt54pro')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.4-pro')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.4-pro",
+                  "version": "2026-03-05"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt54mini')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.4-mini')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.4-mini",
+                  "version": "2026-03-17"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-pro')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt54nano')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.4-nano')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.4-nano",
+                  "version": "2026-03-17"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-mini')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt53codex')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.3-codex')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.3-codex",
+                  "version": "2026-02-24"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.4-nano')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt52')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.2')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.2",
+                  "version": "2025-12-11"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.3-codex')]",
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('deployGpt52codex')]",
+              "type": "Microsoft.CognitiveServices/accounts/deployments",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('name'), 'gpt-5.2-codex')]",
+              "sku": {
+                "name": "GlobalStandard",
+                "capacity": "[parameters('capacity')]"
+              },
+              "properties": {
+                "model": {
+                  "format": "OpenAI",
+                  "name": "gpt-5.2-codex",
+                  "version": "2026-01-14"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.2')]",
                 "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
               ]
             }
@@ -550,7 +705,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').aiHub]"
@@ -681,7 +836,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "name": {
             "value": "[variables('names').aiProject]"
