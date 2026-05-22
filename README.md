@@ -4,9 +4,7 @@ Azure AI Foundry と GPT 最新モデルを **1クリック** でデプロイで
 
 ## Deploy to Azure
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2F%3COWNER%3E%2Fquick_setup_aif%2Fmain%2Farm%2Fazuredeploy.json)
-
-> **注意**: ボタンURL内の `<OWNER>` をご自身の GitHub ユーザー名または組織名に変更してください。
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fhihirata-eng%2Fquick_setup_aif%2Fmain%2Farm%2Fazuredeploy.json)
 
 ## デプロイされるリソース
 
