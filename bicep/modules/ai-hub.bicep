@@ -29,13 +29,12 @@ resource aiServicesConnection 'Microsoft.MachineLearningServices/workspaces/conn
   parent: aiHub
   name: '${name}-connection-AIServices'
   properties: {
-    category: 'AzureOpenAI'
+    category: 'AIServices'
     target: aiServicesTarget
     authType: 'AAD'
     isSharedToAll: true
     metadata: {
-      ApiVersion: '2024-02-01'
-      ApiType: 'azure'
+      ApiType: 'Azure'
       ResourceId: aiServicesId
     }
   }

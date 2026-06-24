@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.44.1.10279",
-      "templateHash": "13586467125442058351"
+      "templateHash": "2134141659642250410"
     }
   },
   "parameters": {
@@ -737,7 +737,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "2841018683257983987"
+              "templateHash": "7652897894337379856"
             }
           },
           "parameters": {
@@ -794,13 +794,12 @@
               "apiVersion": "2024-04-01",
               "name": "[format('{0}/{1}', parameters('name'), format('{0}-connection-AIServices', parameters('name')))]",
               "properties": {
-                "category": "AzureOpenAI",
+                "category": "AIServices",
                 "target": "[parameters('aiServicesTarget')]",
                 "authType": "AAD",
                 "isSharedToAll": true,
                 "metadata": {
-                  "ApiVersion": "2024-02-01",
-                  "ApiType": "azure",
+                  "ApiType": "Azure",
                   "ResourceId": "[parameters('aiServicesId')]"
                 }
               },
