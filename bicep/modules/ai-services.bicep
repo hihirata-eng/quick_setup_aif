@@ -15,9 +15,6 @@ param deployGpt52codex bool = false
 @maxValue(100)
 param capacity int = 10
 
-@description('Object ID of the Microsoft Entra ID user to grant Azure AI Developer role')
-param userObjectId string = ''
-
 // AIServices (kind: 'AIServices') は Azure AI Foundry ネイティブのマルチサービスアカウント。
 // kind: 'OpenAI' の単独リソースではなく、AI Hub と統合して使用する推奨方式。
 resource aiServices 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = {
@@ -115,19 +112,3 @@ resource dep52codex 'Microsoft.CognitiveServices/accounts/deployments@2024-04-01
 
 output id string = aiServices.id
 output endpoint string = aiServices.properties.endpoint
-
-// Azure AI Developer role: allows model deployments and prompt flow management
-resource azureAIDeveloperRole 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' existing = if (userObjectId != '') {
-  name: '64702f94-c441-49e6-a78b-ef80e0188fee'
-  scope: resourceGroup()
-}
-
-resource azureAIDeveloperRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (userObjectId != '') {
-  name: guid(aiServices.id, userObjectId, azureAIDeveloperRole.id)
-  scope: aiServices
-  properties: {
-    principalId: userObjectId
-    roleDefinitionId: azureAIDeveloperRole.id
-    principalType: 'User'
-  }
-}
