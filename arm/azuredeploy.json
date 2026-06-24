@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.43.8.12551",
-      "templateHash": "4965776409236421837"
+      "version": "0.44.1.10279",
+      "templateHash": "2134141659642250410"
     }
   },
   "parameters": {
@@ -120,8 +120,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "5017961820187200940"
+              "version": "0.44.1.10279",
+              "templateHash": "6946114703514757490"
             }
           },
           "parameters": {
@@ -190,8 +190,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "16500869523328771374"
+              "version": "0.44.1.10279",
+              "templateHash": "2763753551864551802"
             }
           },
           "parameters": {
@@ -261,8 +261,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "8355425388655988891"
+              "version": "0.44.1.10279",
+              "templateHash": "10280704339223590396"
             }
           },
           "parameters": {
@@ -330,8 +330,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "1313818725466921026"
+              "version": "0.44.1.10279",
+              "templateHash": "10339725506769261445"
             }
           },
           "parameters": {
@@ -441,8 +441,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "15916169625989980772"
+              "version": "0.44.1.10279",
+              "templateHash": "15022512091993689294"
             }
           },
           "parameters": {
@@ -736,8 +736,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "13168869278016166413"
+              "version": "0.44.1.10279",
+              "templateHash": "7652897894337379856"
             }
           },
           "parameters": {
@@ -794,13 +794,12 @@
               "apiVersion": "2024-04-01",
               "name": "[format('{0}/{1}', parameters('name'), format('{0}-connection-AIServices', parameters('name')))]",
               "properties": {
-                "category": "AzureOpenAI",
+                "category": "AIServices",
                 "target": "[parameters('aiServicesTarget')]",
                 "authType": "AAD",
                 "isSharedToAll": true,
                 "metadata": {
-                  "ApiVersion": "2024-02-01",
-                  "ApiType": "azure",
+                  "ApiType": "Azure",
                   "ResourceId": "[parameters('aiServicesId')]"
                 }
               },
@@ -858,8 +857,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.43.8.12551",
-              "templateHash": "3994577017322884424"
+              "version": "0.44.1.10279",
+              "templateHash": "2855035928898796083"
             }
           },
           "parameters": {
