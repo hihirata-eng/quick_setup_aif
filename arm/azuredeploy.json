@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.44.1.10279",
-      "templateHash": "3506110880421364415"
+      "templateHash": "13586467125442058351"
     }
   },
   "parameters": {
@@ -73,13 +73,6 @@
       "metadata": {
         "description": "Tokens per minute capacity per model (in thousands)"
       }
-    },
-    "userObjectId": {
-      "type": "string",
-      "defaultValue": "[deployer().objectId]",
-      "metadata": {
-        "description": "Object ID of the Microsoft Entra ID user to grant necessary role assignments. Defaults to the deploying user."
-      }
     }
   },
   "variables": {
@@ -119,9 +112,6 @@
           },
           "tags": {
             "value": "[variables('tags')]"
-          },
-          "userObjectId": {
-            "value": "[parameters('userObjectId')]"
           }
         },
         "template": {
@@ -131,7 +121,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "9155112103345963311"
+              "templateHash": "6946114703514757490"
             }
           },
           "parameters": {
@@ -144,13 +134,6 @@
             "tags": {
               "type": "object",
               "defaultValue": {}
-            },
-            "userObjectId": {
-              "type": "string",
-              "defaultValue": "",
-              "metadata": {
-                "description": "Object ID of the Microsoft Entra ID user to grant Storage role assignments"
-              }
             }
           },
           "resources": [
@@ -170,66 +153,6 @@
                 "minimumTlsVersion": "TLS1_2",
                 "supportsHttpsTrafficOnly": true
               }
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', '17d1049b-9a84-46fb-8f53-869881c3d3ab'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '17d1049b-9a84-46fb-8f53-869881c3d3ab')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-              ]
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-              ]
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', '69566ab7-960f-475b-8e7c-b3118f30c6bd'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '69566ab7-960f-475b-8e7c-b3118f30c6bd')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-              ]
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.Storage/storageAccounts', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-              ]
             }
           ],
           "outputs": {
@@ -259,9 +182,6 @@
           },
           "tags": {
             "value": "[variables('tags')]"
-          },
-          "userObjectId": {
-            "value": "[parameters('userObjectId')]"
           }
         },
         "template": {
@@ -271,7 +191,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "8115428958574613386"
+              "templateHash": "2763753551864551802"
             }
           },
           "parameters": {
@@ -284,13 +204,6 @@
             "tags": {
               "type": "object",
               "defaultValue": {}
-            },
-            "userObjectId": {
-              "type": "string",
-              "defaultValue": "",
-              "metadata": {
-                "description": "Object ID of the Microsoft Entra ID user to grant Key Vault Administrator role"
-              }
             }
           },
           "resources": [
@@ -311,21 +224,6 @@
                 "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 7
               }
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.KeyVault/vaults', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', '00482a5a-887f-4fb3-b363-3b7fe8e74483'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '00482a5a-887f-4fb3-b363-3b7fe8e74483')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]"
-              ]
             }
           ],
           "outputs": {
@@ -535,9 +433,6 @@
           },
           "capacity": {
             "value": "[parameters('gptDeploymentCapacity')]"
-          },
-          "userObjectId": {
-            "value": "[parameters('userObjectId')]"
           }
         },
         "template": {
@@ -547,7 +442,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "2374540385120875324"
+              "templateHash": "15022512091993689294"
             }
           },
           "parameters": {
@@ -598,13 +493,6 @@
               "defaultValue": 10,
               "minValue": 1,
               "maxValue": 100
-            },
-            "userObjectId": {
-              "type": "string",
-              "defaultValue": "",
-              "metadata": {
-                "description": "Object ID of the Microsoft Entra ID user to grant Azure AI Developer role"
-              }
             }
           },
           "resources": [
@@ -789,21 +677,6 @@
                 "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
                 "[resourceId('Microsoft.CognitiveServices/accounts/deployments', parameters('name'), 'gpt-5.2')]"
               ]
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.CognitiveServices/accounts', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', '64702f94-c441-49e6-a78b-ef80e0188fee'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '64702f94-c441-49e6-a78b-ef80e0188fee')]",
-                "principalType": "User"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('name'))]"
-              ]
             }
           ],
           "outputs": {
@@ -855,9 +728,6 @@
           },
           "aiServicesTarget": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'aiServices'), '2025-04-01').outputs.endpoint.value]"
-          },
-          "userObjectId": {
-            "value": "[parameters('userObjectId')]"
           }
         },
         "template": {
@@ -867,7 +737,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "3468839101532945340"
+              "templateHash": "2841018683257983987"
             }
           },
           "parameters": {
@@ -898,19 +768,12 @@
             },
             "aiServicesTarget": {
               "type": "string"
-            },
-            "userObjectId": {
-              "type": "string",
-              "defaultValue": "",
-              "metadata": {
-                "description": "Object ID of the Microsoft Entra ID user to grant Azure ML Data Scientist role"
-              }
             }
           },
           "resources": [
             {
               "type": "Microsoft.MachineLearningServices/workspaces",
-              "apiVersion": "2024-04-01-preview",
+              "apiVersion": "2024-04-01",
               "name": "[parameters('name')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
@@ -923,8 +786,7 @@
                 "storageAccount": "[parameters('storageAccountId')]",
                 "keyVault": "[parameters('keyVaultId')]",
                 "containerRegistry": "[parameters('containerRegistryId')]",
-                "applicationInsights": "[parameters('applicationInsightsId')]",
-                "systemDatastoresAuthMode": "identity"
+                "applicationInsights": "[parameters('applicationInsightsId')]"
               }
             },
             {
@@ -932,29 +794,15 @@
               "apiVersion": "2024-04-01",
               "name": "[format('{0}/{1}', parameters('name'), format('{0}-connection-AIServices', parameters('name')))]",
               "properties": {
-                "category": "AIServices",
+                "category": "AzureOpenAI",
                 "target": "[parameters('aiServicesTarget')]",
                 "authType": "AAD",
                 "isSharedToAll": true,
                 "metadata": {
-                  "ApiType": "Azure",
+                  "ApiVersion": "2024-02-01",
+                  "ApiType": "azure",
                   "ResourceId": "[parameters('aiServicesId')]"
                 }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('name'))]"
-              ]
-            },
-            {
-              "condition": "[not(equals(parameters('userObjectId'), ''))]",
-              "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2022-04-01",
-              "scope": "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('name'))]",
-              "name": "[guid(resourceId('Microsoft.MachineLearningServices/workspaces', parameters('name')), parameters('userObjectId'), resourceId('Microsoft.Authorization/roleDefinitions', 'f6c7c914-8db3-469d-8ca1-694a8f32e121'))]",
-              "properties": {
-                "principalId": "[parameters('userObjectId')]",
-                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'f6c7c914-8db3-469d-8ca1-694a8f32e121')]",
-                "principalType": "User"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('name'))]"

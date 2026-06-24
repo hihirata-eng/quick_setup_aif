@@ -29,9 +29,6 @@ param deployGpt52codex bool = false
 @maxValue(100)
 param gptDeploymentCapacity int = 10
 
-@description('Object ID of the Microsoft Entra ID user to grant necessary role assignments. Defaults to the deploying user.')
-param userObjectId string = deployer().objectId
-
 var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 6)
 var tags = {
   project: 'quick-setup-aif'
@@ -57,7 +54,6 @@ module storage 'modules/storage.bicep' = {
     location: location
     name: names.storage
     tags: tags
-    userObjectId: userObjectId
   }
 }
 
@@ -67,7 +63,6 @@ module keyVault 'modules/keyvault.bicep' = {
     location: location
     name: names.keyVault
     tags: tags
-    userObjectId: userObjectId
   }
 }
 
@@ -105,7 +100,6 @@ module aiServices 'modules/ai-services.bicep' = {
     deployGpt52: deployGpt52
     deployGpt52codex: deployGpt52codex
     capacity: gptDeploymentCapacity
-    userObjectId: userObjectId
   }
 }
 
@@ -121,7 +115,6 @@ module aiHub 'modules/ai-hub.bicep' = {
     applicationInsightsId: appInsights.outputs.id
     aiServicesId: aiServices.outputs.id
     aiServicesTarget: aiServices.outputs.endpoint
-    userObjectId: userObjectId
   }
 }
 
