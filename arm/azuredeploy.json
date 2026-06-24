@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.44.1.10279",
-      "templateHash": "4855246400169848794"
+      "templateHash": "13888627772571592692"
     }
   },
   "parameters": {
@@ -76,9 +76,9 @@
     },
     "userObjectId": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "[deployer().objectId]",
       "metadata": {
-        "description": "Object ID of the Microsoft Entra ID user to grant necessary role assignments. Leave empty to skip role assignments."
+        "description": "Object ID of the Microsoft Entra ID user to grant necessary role assignments. Defaults to the deploying user."
       }
     }
   },

@@ -29,8 +29,8 @@ param deployGpt52codex bool = false
 @maxValue(100)
 param gptDeploymentCapacity int = 10
 
-@description('Object ID of the Microsoft Entra ID user to grant necessary role assignments. Leave empty to skip role assignments.')
-param userObjectId string = ''
+@description('Object ID of the Microsoft Entra ID user to grant necessary role assignments. Defaults to the deploying user.')
+param userObjectId string = deployer().objectId
 
 var uniqueSuffix = substring(uniqueString(resourceGroup().id), 0, 6)
 var tags = {
